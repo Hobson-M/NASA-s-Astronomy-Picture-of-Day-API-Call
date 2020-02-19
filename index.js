@@ -54,7 +54,7 @@ passport.deserializeUser(Nasa.deserializeUser());
 
 // 1. HOME ROUTE
 
-app.get('/home', (req, res)=> {
+app.get('/home', isLoggedIn, (req, res)=> {
     request('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (err, response, body) => {
        
         if (err) {
@@ -91,11 +91,39 @@ app.post('/signup', (req, res)=> {
 })
 
 
-/// 3. LOGIN ROUTE
+// 3. LOGIN ROUTE
 
 app.get('/login', (req, res)=> {
 res.render('/home/hobson/Desktop/practice/NASA-API/views/login.ejs');
 })
+
+// 3.1 LOGIN POST ROUTE
+
+app.post('/login', passport.authenticate('local', {
+    successRedirect : '/home',
+    failureRedirect : '/signup'
+}), (req, res)=> {
+
+})
+
+// 4. LOGOUT ROUTE
+
+app.get('/logout', (req, res)=> {
+    req.logOut();
+    res.redirect('/login')
+})
+
+//========================================
+// MIDDLEWARE TO CONTROL LOGIN SESSIONS  =
+// =======================================
+
+function isLoggedIn (req, res, next) {
+    if (req.isAuthenticated) {
+        return next();
+    } else {
+        res.redirect('/login')
+    }
+}
 
 
 
