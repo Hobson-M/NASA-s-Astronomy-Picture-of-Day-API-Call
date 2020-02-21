@@ -109,8 +109,8 @@ app.post('/login', passport.authenticate('local', {
 // 4. LOGOUT ROUTE
 
 app.get('/logout', (req, res)=> {
-    req.logOut();
-    res.redirect('/login')
+    req.logOut()
+    res.redirect('/login');
 })
 
 //========================================
